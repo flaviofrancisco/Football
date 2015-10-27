@@ -8,6 +8,9 @@ import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by Flavio on 10/25/2015.
  */
@@ -55,8 +58,13 @@ public class Widget_FootballRemoteViewsService extends RemoteViewsService {
                 }
 
                 final long identityToken = Binder.clearCallingIdentity();
-                Uri uri = DatabaseContract.scores_table.buildScoreAll();
-                data = getContentResolver().query(uri, SCORE_COLUMNS, null, null, null);
+
+                Date today = new Date(System.currentTimeMillis());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String dateToday = dateFormat.format(today);
+
+                Uri uri = DatabaseContract.scores_table.buildScoreWithDate();
+                data = getContentResolver().query(uri, SCORE_COLUMNS, null, new String[] { dateToday }, DatabaseContract.scores_table.DATE_COL + " DESC");
                 Binder.restoreCallingIdentity(identityToken);
             }
 
