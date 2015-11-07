@@ -6,6 +6,13 @@
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Permissions required by the sync adapter -->
+    <uses-permission
+        android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission
+        android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission
+        android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
 
     <application
         android:allowBackup="true"
@@ -35,7 +42,6 @@
                 android:value="barqsoft.footballscores.MainActivity" />
         </activity>
 
-        <service android:name=".service.myFetchService" />
         <!-- Detail Widget -->
 
         <receiver android:name=".Widget_FootballProvider" >
@@ -51,6 +57,34 @@
             android:name=".Widget_FootballRemoteViewsService"
             android:permission="android.permission.BIND_REMOTEVIEWS"
             />
+
+        <!-- SyncAdapter's dummy authentication service -->
+        <service
+            android:name=".sync.FootballAuthenticatorService"
+            >
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+
+        <!-- The SyncAdapter service -->
+        <service
+            android:name=".sync.FootballSyncService"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
+        </service>
+
     </application>
+
+
 
 </manifest>

@@ -39,4 +39,8 @@
     <string name="empty_score_list">No data available</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+
+    <string name="sync_account_type">barqsoft.footballscores</string>
+    <string name="content_authority">barqsoft.footballscores</string>
+
 </resources>

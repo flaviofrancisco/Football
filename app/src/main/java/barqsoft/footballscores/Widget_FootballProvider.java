@@ -12,12 +12,14 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
 
-import barqsoft.footballscores.service.myFetchService;
+import barqsoft.footballscores.sync.FootballSyncAdapter;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class Widget_FootballProvider extends AppWidgetProvider {
+
+    public static final String EXTRA_ITEM = "barqsoft.footballscores.EXTRA_ITEM";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -47,6 +49,7 @@ public class Widget_FootballProvider extends AppWidgetProvider {
         Intent intent = new Intent(context, MainActivity.class);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
         views.setOnClickPendingIntent(R.id.widget, pendingIntent);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -72,7 +75,7 @@ public class Widget_FootballProvider extends AppWidgetProvider {
     public void onReceive(@NonNull Context context, @NonNull Intent intent) {
         super.onReceive(context, intent);
 
-        if(myFetchService.ACTION_DATA_UPDATED.equals(intent.getAction()))
+        if(FootballSyncAdapter.ACTION_DATA_UPDATED.equals(intent.getAction()))
         {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 

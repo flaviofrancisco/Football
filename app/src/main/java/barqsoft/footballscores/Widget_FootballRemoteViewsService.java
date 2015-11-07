@@ -4,12 +4,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by Flavio on 10/25/2015.
@@ -59,12 +57,13 @@ public class Widget_FootballRemoteViewsService extends RemoteViewsService {
 
                 final long identityToken = Binder.clearCallingIdentity();
 
-                Date today = new Date(System.currentTimeMillis());
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                String dateToday = dateFormat.format(today);
+                /*Date today = new Date(System.currentTimeMillis());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");*/
+                /*String dateToday = dateFormat.format(today);*/
 
-                Uri uri = DatabaseContract.scores_table.buildScoreWithDate();
-                data = getContentResolver().query(uri, SCORE_COLUMNS, null, new String[] { dateToday }, DatabaseContract.scores_table.DATE_COL + " DESC");
+                Uri uri = DatabaseContract.scores_table.buildScoreAll();
+                data = getContentResolver().query(uri, SCORE_COLUMNS, null, null, DatabaseContract.scores_table.DATE_COL + " DESC");
+/*              data = getContentResolver().query(uri, SCORE_COLUMNS, null, new String[] { dateToday }, DatabaseContract.scores_table.DATE_COL + " DESC");*/
                 Binder.restoreCallingIdentity(identityToken);
             }
 
@@ -95,14 +94,26 @@ public class Widget_FootballRemoteViewsService extends RemoteViewsService {
                 String home_name = data.getString(INDEX_SCORE_HOME_COL);
                 String away_name = data.getString(INDEX_SCORE_AWAY_COL);
                 String matchtime = data.getString(INDEX_SCORE_TIME_COL);
+                String matchday = data.getString(INDEX_SCORE_DATE_COL);
                 String scores = Utilies.getScores(data.getInt(INDEX_SCORE_HOME_GOALS_COL), data.getInt(INDEX_SCORE_AWAY_COL));
 
                 views.setTextViewText(R.id.home_name, home_name);
                 views.setTextViewText(R.id.away_name, away_name);
                 views.setTextViewText(R.id.data_textview, matchtime);
+                views.setTextViewText(R.id.day_textview, matchday);
                 views.setTextViewText(R.id.score_textview, scores);
                 views.setImageViewResource(R.id.home_crest, Utilies.getTeamCrestByTeamName(data.getString(INDEX_SCORE_HOME_COL)));
                 views.setImageViewResource(R.id.away_crest, Utilies.getTeamCrestByTeamName(data.getString(INDEX_SCORE_AWAY_COL)));
+
+                Bundle extras = new Bundle();
+                extras.putInt(Widget_FootballProvider.EXTRA_ITEM, position);
+                Intent fillInIntent = new Intent();
+                fillInIntent.putExtras(extras);
+                views.setOnClickFillInIntent(R.id.score_textview, fillInIntent);
+                views.setOnClickFillInIntent(R.id.home_name, fillInIntent);
+                views.setOnClickFillInIntent(R.id.away_name, fillInIntent);
+                views.setOnClickFillInIntent(R.id.home_crest, fillInIntent);
+                views.setOnClickFillInIntent(R.id.away_crest, fillInIntent);
 
                 return views;
             }
