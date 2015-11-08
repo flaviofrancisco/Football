@@ -58,13 +58,16 @@ public class Widget_FootballProvider extends AppWidgetProvider {
             setRemoteAdapterV11(context, views);
         }
 
-        Intent clickIntentTemplate = new Intent(context, MainActivity.class);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+            Intent clickIntentTemplate = new Intent(context, MainActivity.class);
 
-        PendingIntent clickPendingIntentTemplate = TaskStackBuilder.create(context)
-                .addNextIntentWithParentStack(clickIntentTemplate)
-                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent clickPendingIntentTemplate = TaskStackBuilder.create(context)
+                    .addNextIntentWithParentStack(clickIntentTemplate)
+                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        views.setPendingIntentTemplate(R.id.widget_list, clickPendingIntentTemplate);
+            views.setPendingIntentTemplate(R.id.widget_list, clickPendingIntentTemplate);
+        }
+
         views.setEmptyView(R.id.widget_list, R.id.widget_empty);
 
         // Instruct the widget manager to update the widget

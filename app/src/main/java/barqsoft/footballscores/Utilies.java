@@ -1,5 +1,11 @@
 package barqsoft.footballscores;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
+import java.net.InetAddress;
+
 /**
  * Created by yehya khaled on 3/3/2015.
  */
@@ -10,6 +16,7 @@ public class Utilies
     public static final int CHAMPIONS_LEAGUE = 362;
     public static final int PRIMERA_DIVISION = 358;
     public static final int BUNDESLIGA = 351;
+
     public static String getLeague(int league_num)
     {
         switch (league_num)
@@ -83,5 +90,44 @@ public class Utilies
             case "Stoke City FC" : return R.drawable.stoke_city;
             default: return R.drawable.no_icon;
         }
+    }
+
+    public static Boolean isNetworkConnected(Context con){
+
+        ConnectivityManager connectivityManager;
+        NetworkInfo wifiInfo, mobileInfo;
+
+        try{
+
+            connectivityManager = (ConnectivityManager) con.getSystemService(Context.CONNECTIVITY_SERVICE);
+            wifiInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            mobileInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            if(wifiInfo.isConnected() || mobileInfo.isConnected())
+            {
+                return true;
+            }
+        }
+        catch(Exception e){
+            System.out.println("CheckConnectivity Exception: " + e.getMessage());
+        }
+
+        return false;
+    }
+
+    public static boolean isInternetAvailable(String url) {
+        try {
+            InetAddress ipAddr = InetAddress.getByName(url); //You can replace it with your name
+
+            if (ipAddr.equals("")) {
+                return false;
+            } else {
+                return true;
+            }
+
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 }

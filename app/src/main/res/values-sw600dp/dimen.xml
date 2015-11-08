@@ -8,5 +8,7 @@
         <dimen name="TeamNames">17sp</dimen>
         <dimen name="Score">30sp</dimen>
         <dimen name="League">15sp</dimen>
+        <dimen name="rtl_padding_start">25dp</dimen>
+        <dimen name="rtl_padding_left">25dp</dimen>
     </resources>
 

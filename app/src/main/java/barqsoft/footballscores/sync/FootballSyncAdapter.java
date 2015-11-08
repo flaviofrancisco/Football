@@ -44,7 +44,7 @@ public class FootballSyncAdapter extends AbstractThreadedSyncAdapter {
     public static final String ACTION_DATA_UPDATED = "barqsoft.footballscores.ACTION_DATA_UPDATED";
     // Interval at which to sync with the weather, in seconds.
     // 60 seconds (1 minute) * 180 = 3 hours
-    public static final int SYNC_INTERVAL = 60 * 180;
+    public static final int SYNC_INTERVAL = 5;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
 
     public FootballSyncAdapter(Context context, boolean autoInitialize) {
@@ -71,19 +71,15 @@ public class FootballSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private void getData (String timeFrame)
     {
-        //Creating fetch URL
-        final String BASE_URL = "http://api.football-data.org/alpha/fixtures"; //Base URL
-        final String QUERY_TIME_FRAME = "timeFrame"; //Time Frame parameter to determine days
-        //final String QUERY_MATCH_DAY = "matchday";
+        Uri fetch_build = getUri(timeFrame);
 
-        Uri fetch_build = Uri.parse(BASE_URL).buildUpon().
-                appendQueryParameter(QUERY_TIME_FRAME, timeFrame).build();
         //Log.v(LOG_TAG, "The url we are looking at is: "+fetch_build.toString()); //log spam
         HttpURLConnection m_connection = null;
         BufferedReader reader = null;
         String JSON_data = null;
         //Opening Connection
         try {
+
             URL fetch = new URL(fetch_build.toString());
             m_connection = (HttpURLConnection) fetch.openConnection();
             m_connection.setRequestMethod("GET");
@@ -155,6 +151,17 @@ public class FootballSyncAdapter extends AbstractThreadedSyncAdapter {
             Log.e(LOG_TAG,e.getMessage());
         }
     }
+
+    public static Uri getUri(String timeFrame) {
+        //Creating fetch URL
+        final String BASE_URL = "http://api.football-data.org/alpha/fixtures"; //Base URL
+        final String QUERY_TIME_FRAME = "timeFrame"; //Time Frame parameter to determine days
+        //final String QUERY_MATCH_DAY = "matchday";
+
+        return Uri.parse(BASE_URL).buildUpon().
+                appendQueryParameter(QUERY_TIME_FRAME, timeFrame).build();
+    }
+
     private void processJSONdata (String JSONdata,Context mContext, boolean isReal)
     {
         //JSON data

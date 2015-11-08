@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import barqsoft.footballscores.sync.FootballSyncAdapter;
 
@@ -30,6 +31,11 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
 
     private void update_scores()
     {
+        if(!Utilies.isNetworkConnected(getActivity()) || Utilies.isInternetAvailable(FootballSyncAdapter.getUri("p1").toString())) {
+            Toast.makeText(getActivity(), R.string.info_no_connection_available, Toast.LENGTH_LONG).show();
+            return;
+        }
+
         FootballSyncAdapter.syncImmediately(getActivity());
     }
 

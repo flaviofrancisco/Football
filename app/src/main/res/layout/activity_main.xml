@@ -5,5 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     tools:ignore="MergeRootFrame"
-    android:background="@color/green13">
+    android:background="@color/green13"
+    android:contentDescription="@string/app_name"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingStart="@dimen/rtl_padding_start">
 </FrameLayout>
